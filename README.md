@@ -1,6 +1,6 @@
-# GRE Logic App
+# GRE Logic Flashcards
 
-GRE Logic App is a web-based implementation of the Support–Contrast Logic list for GRE verbal preparation.
+GRE Logic Flashcards is a web-based implementation of the Support–Contrast Logic list for GRE verbal preparation.
 
 The content is sourced from the following spreadsheet:
 [Support–Contrast Logic List](https://docs.google.com/spreadsheets/d/1jQ3olVKMXJThLp7j_S8Fh6g4sAibD11-vHeMnBKIsFM/edit?gid=0#gid=0)
