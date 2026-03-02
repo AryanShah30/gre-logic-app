@@ -155,7 +155,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
   if (isFinished) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center w-full overflow-hidden px-4 py-4">
-      <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl px-6 py-5 md:px-8 md:py-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-5 text-center relative z-10">
+      <div className="w-full max-w-md max-h-full bg-white/40 backdrop-blur-2xl px-6 py-5 md:px-8 md:py-6 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-4 text-center relative z-10 overflow-y-auto custom-scrollbar">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Session Complete!</h2>
         
         {!isFlashcardMode && (
@@ -171,15 +171,56 @@ export function Quiz({ mode, onExit }: QuizProps) {
               </div>
             </div>
             
-            <div className="space-y-3 text-left max-h-40 md:max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-              {statsData.map(([category, { correct, incorrect }]) => (
-                <div key={category} className="flex flex-col gap-1 border-b border-gray-100 pb-2 last:border-0">
-                  <div className="flex justify-between items-center text-sm font-medium">
-                    <span className="text-gray-600">{category}</span>
-                    <span className="text-gray-900">{correct.length}/{correct.length + incorrect.length}</span>
+            <div className="space-y-3 text-left max-h-48 md:max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+              {statsData.map(([category, { correct, incorrect }]) => {
+                const total = correct.length + incorrect.length;
+                const isExpanded = expandedCategory === category;
+                return (
+                  <div key={category} className="flex flex-col gap-2 border-b border-gray-100 pb-2 last:border-0">
+                    <button
+                      onClick={() => toggleCategory(category)}
+                      className="flex flex-col gap-1 w-full text-left group"
+                    >
+                      <div className="flex justify-between text-sm font-medium items-center">
+                        <span className="text-gray-700 group-hover:text-gray-900 transition-colors flex items-center gap-1">
+                          {category}
+                          {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                        </span>
+                        <span className="text-gray-500 text-xs">{correct.length} / {total}</span>
+                      </div>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="pl-2 border-l-2 border-gray-100 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                        {incorrect.length > 0 && (
+                          <div>
+                            <div className="text-xs font-bold text-rose-600 mb-1 uppercase tracking-wider">Incorrect</div>
+                            <div className="flex flex-wrap gap-1">
+                              {incorrect.map(term => (
+                                <span key={term} className="px-2 py-0.5 bg-rose-50 text-rose-700 rounded text-xs border border-rose-100">
+                                  {term}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {correct.length > 0 && (
+                          <div>
+                            <div className="text-xs font-bold text-emerald-600 mb-1 uppercase tracking-wider">Correct</div>
+                            <div className="flex flex-wrap gap-1">
+                              {correct.map(term => (
+                                <span key={term} className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs border border-emerald-100">
+                                  {term}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -211,7 +252,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
       <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl p-5 md:p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-4 md:space-y-6 relative z-10">
       {showStats && (
         <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-md animate-in fade-in duration-200 rounded-[2.5rem]">
-          <div className="w-full h-full max-h-[80vh] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 flex flex-col">
+          <div className="w-full h-full bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 flex flex-col overflow-hidden">
             <div className="flex justify-between items-center mb-6 flex-shrink-0">
               <h3 className="text-xl font-bold text-gray-900">Session Log</h3>
               <button onClick={() => setShowStats(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
@@ -250,25 +291,25 @@ export function Quiz({ mode, onExit }: QuizProps) {
                       
                       {isExpanded && (
                         <div className="pl-2 border-l-2 border-gray-100 space-y-2 animate-in slide-in-from-top-2 duration-200">
-                          {correct.length > 0 && (
-                            <div>
-                              <div className="text-xs font-bold text-emerald-600 mb-1 uppercase tracking-wider">Correct</div>
-                              <div className="flex flex-wrap gap-1">
-                                {correct.map(term => (
-                                  <span key={term} className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs border border-emerald-100">
-                                    {term}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
                           {incorrect.length > 0 && (
                             <div>
                               <div className="text-xs font-bold text-rose-600 mb-1 uppercase tracking-wider">Incorrect</div>
                               <div className="flex flex-wrap gap-1">
                                 {incorrect.map(term => (
                                   <span key={term} className="px-2 py-0.5 bg-rose-50 text-rose-700 rounded text-xs border border-rose-100">
+                                    {term}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {correct.length > 0 && (
+                            <div>
+                              <div className="text-xs font-bold text-emerald-600 mb-1 uppercase tracking-wider">Correct</div>
+                              <div className="flex flex-wrap gap-1">
+                                {correct.map(term => (
+                                  <span key={term} className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs border border-emerald-100">
                                     {term}
                                   </span>
                                 ))}

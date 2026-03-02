@@ -47,9 +47,7 @@ export function Card({ word, showExample, status }: CardProps) {
             
             <div className="text-xl font-bold text-gray-900">{word.category}</div>
             
-            {word.subCategory && (
-              <div className="text-sm font-medium text-gray-500 mt-1">{word.subCategory}</div>
-            )}
+
           </div>
           {word.example && (
             <p className="text-base md:text-xl text-gray-600 font-serif italic leading-relaxed">"{word.example}"</p>
