@@ -154,23 +154,24 @@ export function Quiz({ mode, onExit }: QuizProps) {
 
   if (isFinished) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full max-w-md mx-auto px-6 py-8 text-center space-y-8">
-        <h2 className="text-3xl font-bold text-gray-900">Session Complete!</h2>
+      <div className="flex-1 flex flex-col items-center justify-center w-full overflow-hidden px-4 py-4">
+      <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl px-6 py-5 md:px-8 md:py-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-5 text-center relative z-10">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Session Complete!</h2>
         
         {!isFlashcardMode && (
-          <div className="w-full bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-sm border border-white/20">
-            <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="w-full bg-white/60 backdrop-blur-xl rounded-3xl p-5 shadow-sm border border-white/20">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="flex flex-col">
-                <span className="text-4xl font-bold text-emerald-600">{sessionStats.correct.length}</span>
-                <span className="text-sm text-gray-500 uppercase tracking-wider font-medium">Correct</span>
+                <span className="text-3xl md:text-4xl font-bold text-emerald-600">{sessionStats.correct.length}</span>
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Correct</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-4xl font-bold text-rose-600">{sessionStats.incorrect.length}</span>
-                <span className="text-sm text-gray-500 uppercase tracking-wider font-medium">Incorrect</span>
+                <span className="text-3xl md:text-4xl font-bold text-rose-600">{sessionStats.incorrect.length}</span>
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Incorrect</span>
               </div>
             </div>
             
-            <div className="space-y-3 text-left max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-3 text-left max-h-40 md:max-h-60 overflow-y-auto pr-2 custom-scrollbar">
               {statsData.map(([category, { correct, incorrect }]) => (
                 <div key={category} className="flex flex-col gap-1 border-b border-gray-100 pb-2 last:border-0">
                   <div className="flex justify-between items-center text-sm font-medium">
@@ -186,18 +187,19 @@ export function Quiz({ mode, onExit }: QuizProps) {
         <div className="w-full space-y-3">
           <button 
             onClick={handleRestart}
-            className="w-full h-14 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+            className="w-full h-12 md:h-14 rounded-2xl bg-gray-900 text-white font-bold text-base md:text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
           >
-            <RotateCcw size={20} /> Restart Session
+            <RotateCcw size={18} /> Restart Session
           </button>
           
           <button 
             onClick={onExit}
-            className="w-full h-14 rounded-2xl bg-white text-gray-900 font-bold text-lg hover:bg-gray-50 active:scale-95 transition-all border border-gray-200"
+            className="w-full h-12 md:h-14 rounded-2xl bg-white text-gray-900 font-bold text-base md:text-lg hover:bg-gray-50 active:scale-95 transition-all border border-gray-200"
           >
-            Exit to Menu
+            Back to Menu
           </button>
         </div>
+      </div>
       </div>
     );
   }
@@ -205,8 +207,8 @@ export function Quiz({ mode, onExit }: QuizProps) {
   if (!currentWord) return <div className="p-8 text-center text-gray-400 font-medium">Loading deck...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-8 relative">
-      <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-6 relative z-10">
+    <div className="flex-1 flex flex-col items-center justify-center w-full px-4 py-3 overflow-hidden">
+      <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl p-5 md:p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-4 md:space-y-6 relative z-10">
       {showStats && (
         <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-md animate-in fade-in duration-200 rounded-[2.5rem]">
           <div className="w-full h-full max-h-[80vh] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 flex flex-col">
@@ -284,7 +286,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
         </div>
       )}
 
-      <div className="w-full flex justify-between items-center mb-8">
+      <div className="w-full flex justify-between items-center mb-4 md:mb-8">
         <button 
           onClick={onExit} 
           className="p-2 -ml-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
@@ -313,7 +315,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
         </div>
       </div>
 
-      <div className="w-full flex justify-center mb-8">
+      <div className="w-full flex justify-center mb-4 md:mb-8">
         <Card 
           word={currentWord} 
           showExample={showExample}

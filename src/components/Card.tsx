@@ -23,10 +23,17 @@ export function Card({ word, showExample, status }: CardProps) {
     return 'text-gray-900';
   };
 
+  const getTermSize = () => {
+    const len = word.term.length;
+    if (len > 18) return 'text-2xl md:text-3xl';
+    if (len > 10) return 'text-3xl md:text-4xl';
+    return 'text-4xl md:text-5xl';
+  };
+
   return (
-    <div className={`w-full max-w-md h-72 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border flex flex-col items-center justify-center p-8 text-center transition-all duration-500 ${getBgColor()}`}>
+    <div className={`w-full max-w-md h-56 md:h-72 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border flex flex-col items-center justify-center p-5 md:p-8 text-center transition-all duration-500 ${getBgColor()}`}>
       {!showExample ? (
-        <h2 className={`text-5xl font-bold tracking-tight transition-colors duration-500 ${getTextColor()}`}>{word.term}</h2>
+        <h2 className={`font-bold tracking-tight transition-colors duration-500 ${getTermSize()} ${getTextColor()}`}>{word.term}</h2>
       ) : (
         <div className="animate-in fade-in zoom-in-95 duration-300 w-full">
           <div className="mb-6">
@@ -45,7 +52,7 @@ export function Card({ word, showExample, status }: CardProps) {
             )}
           </div>
           {word.example && (
-            <p className="text-xl text-gray-600 font-serif italic leading-relaxed">"{word.example}"</p>
+            <p className="text-base md:text-xl text-gray-600 font-serif italic leading-relaxed">"{word.example}"</p>
           )}
         </div>
       )}

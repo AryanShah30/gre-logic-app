@@ -21,7 +21,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-gray-200">
+    <div className="h-dvh overflow-hidden bg-gray-50 text-gray-900 font-sans selection:bg-gray-200 flex flex-col">
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100 via-gray-50 to-white -z-10" />
       
       {view === 'home' && (
