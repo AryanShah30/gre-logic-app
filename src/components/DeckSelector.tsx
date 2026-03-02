@@ -18,7 +18,16 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
         
         <div className="text-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">GRE Logic Flashcards</h2>
-          <p className="text-sm text-gray-500 font-medium mt-2">Choose What to Practice</p>
+          <p className="text-xs text-gray-400 font-medium mt-2">
+            Content source: <a 
+              href="https://docs.google.com/spreadsheets/d/1jQ3olVKMXJThLp7j_S8Fh6g4sAibD11-vHeMnBKIsFM/edit?gid=0#gid=0" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-gray-600 underline decoration-gray-300 transition-colors"
+            >
+              GregMat
+            </a>
+          </p>
         </div>
 
         <button 
