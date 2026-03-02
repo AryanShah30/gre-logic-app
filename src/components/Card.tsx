@@ -23,8 +23,6 @@ export function Card({ word, showExample, status }: CardProps) {
     return 'text-gray-900';
   };
 
-  const isFlashcardMode = word.category === 'Extreme' || word.category === 'Reference';
-
   return (
     <div className={`w-full max-w-md h-72 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border flex flex-col items-center justify-center p-8 text-center transition-all duration-500 ${getBgColor()}`}>
       {!showExample ? (
@@ -32,15 +30,13 @@ export function Card({ word, showExample, status }: CardProps) {
       ) : (
         <div className="animate-in fade-in zoom-in-95 duration-300 w-full">
           <div className="mb-6">
-            {!isFlashcardMode && (
+            {status === 'incorrect' && (
               <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-600 mb-3">
                 Incorrect
               </span>
             )}
             
-            {!isFlashcardMode && (
-              <div className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-1">Correct Answer</div>
-            )}
+            <div className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-1">Correct Answer</div>
             
             <div className="text-xl font-bold text-gray-900">{word.category}</div>
             
@@ -48,7 +44,9 @@ export function Card({ word, showExample, status }: CardProps) {
               <div className="text-sm font-medium text-gray-500 mt-1">{word.subCategory}</div>
             )}
           </div>
-          <p className="text-xl text-gray-600 font-serif italic leading-relaxed">"{word.example}"</p>
+          {word.example && (
+            <p className="text-xl text-gray-600 font-serif italic leading-relaxed">"{word.example}"</p>
+          )}
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-
+import { Analytics } from '@vercel/analytics/react';
 import { useState } from 'react';
 import { DeckSelector } from './components/DeckSelector';
 import { Quiz } from './components/Quiz';
@@ -30,6 +30,7 @@ export default function App() {
           onExit={() => setView('home')} 
         />
       )}
+      <Analytics />
     </div>
   );
 }

@@ -193,10 +193,11 @@ export function Quiz({ mode, onExit }: QuizProps) {
   if (!currentWord) return <div className="p-8 text-center text-gray-400 font-medium">Loading deck...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full max-w-md mx-auto px-6 py-8 relative">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-8 relative">
+      <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-6 relative z-10">
       {showStats && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 h-[80vh] flex flex-col">
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-md animate-in fade-in duration-200 rounded-[2.5rem]">
+          <div className="w-full h-full max-h-[80vh] bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 flex flex-col">
             <div className="flex justify-between items-center mb-6 flex-shrink-0">
               <h3 className="text-xl font-bold text-gray-900">Session Log</h3>
               <button onClick={() => setShowStats(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
@@ -310,20 +311,32 @@ export function Quiz({ mode, onExit }: QuizProps) {
 
       <div className="w-full space-y-3">
         {isFlashcardMode ? (
-          !showExample ? (
-            <button 
-              onClick={() => setShowExample(true)}
-              className="w-full h-16 rounded-2xl bg-white/60 backdrop-blur-xl text-gray-900 font-bold text-lg hover:bg-white/80 active:scale-95 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 flex items-center justify-center gap-2"
-            >
-              Reveal Example
-            </button>
-          ) : (
+          mode === 'Reference' ? (
             <button 
               onClick={nextCard}
               className="w-full h-16 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
             >
               Next Word <ArrowRight size={20} />
             </button>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 w-full">
+              <button 
+                onClick={() => setShowExample(!showExample)}
+                className={`h-16 rounded-2xl font-bold text-lg active:scale-95 transition-all shadow-sm border flex items-center justify-center gap-2 ${
+                  showExample 
+                    ? 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200' 
+                    : 'bg-white/60 backdrop-blur-xl text-gray-900 border-white/20 hover:bg-white/80'
+                }`}
+              >
+                {showExample ? 'Hide Example' : 'Example'}
+              </button>
+              <button 
+                onClick={nextCard}
+                className="h-16 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+              >
+                Next Word <ArrowRight size={20} />
+              </button>
+            </div>
           )
         ) : (
           !showExample ? (
@@ -375,6 +388,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
             </button>
           )
         )}
+      </div>
       </div>
     </div>
   );

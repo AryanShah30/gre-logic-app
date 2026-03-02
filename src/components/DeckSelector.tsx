@@ -13,57 +13,64 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
   const referenceCount = wordList.filter(w => w.category === 'Reference').length;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full max-w-md mx-auto px-6 space-y-6">
-      
-      <button 
-        onClick={() => onSelectMode('SupportContrast')}
-        className="w-full group bg-white/60 backdrop-blur-xl p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
-      >
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-xl text-gray-900">Support vs Contrast</h3>
-          <span className="px-3 py-1 rounded-full bg-gray-100 text-xs font-bold text-gray-500 group-hover:bg-gray-200 transition-colors">{supportCount}</span>
+    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-8 relative">
+      <div className="w-full max-w-md bg-white/40 backdrop-blur-2xl p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 flex flex-col space-y-4 relative z-10">
+        
+        <div className="text-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">GRE Logic Flashcards</h2>
+          <p className="text-sm text-gray-500 font-medium mt-2">Choose What to Practice</p>
         </div>
-      </button>
 
-      <button 
-        onClick={() => onSelectMode('LogicNegative')}
-        className="w-full group bg-white/60 backdrop-blur-xl p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
-      >
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-xl text-gray-900">Logic vs Negative</h3>
-          <span className="px-3 py-1 rounded-full bg-gray-100 text-xs font-bold text-gray-500 group-hover:bg-gray-200 transition-colors">{logicCount}</span>
-        </div>
-      </button>
-
-      <button 
-        onClick={() => onSelectMode('Extreme')}
-        className="w-full group bg-white/60 backdrop-blur-xl p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
-      >
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-xl text-gray-900">Extreme Words</h3>
-          <span className="px-3 py-1 rounded-full bg-gray-100 text-xs font-bold text-gray-500 group-hover:bg-gray-200 transition-colors">{extremeCount}</span>
-        </div>
-      </button>
-
-      <button 
-        onClick={() => onSelectMode('Reference')}
-        className="w-full group bg-white/60 backdrop-blur-xl p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
-      >
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-xl text-gray-900">Previously Referenced</h3>
-          <span className="px-3 py-1 rounded-full bg-gray-100 text-xs font-bold text-gray-500 group-hover:bg-gray-200 transition-colors">{referenceCount}</span>
-        </div>
-      </button>
-
-      <div className="pt-8">
-        <a 
-          href="/Logic Support Contrast List.pdf" 
-          download
-          className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-900 transition-colors px-4 py-2 rounded-full hover:bg-white/50"
+        <button 
+          onClick={() => onSelectMode('SupportContrast')}
+          className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
-          <Download size={16} />
-          Download Entire List
-        </a>
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-xl text-gray-900">Support vs Contrast</h3>
+            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{supportCount}</span>
+          </div>
+        </button>
+
+        <button 
+          onClick={() => onSelectMode('LogicNegative')}
+          className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-xl text-gray-900">Logic vs Negative</h3>
+            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{logicCount}</span>
+          </div>
+        </button>
+
+        <button 
+          onClick={() => onSelectMode('Extreme')}
+          className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-xl text-gray-900">Extreme Words</h3>
+            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{extremeCount}</span>
+          </div>
+        </button>
+
+        <button 
+          onClick={() => onSelectMode('Reference')}
+          className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-xl text-gray-900">Previously Referenced</h3>
+            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{referenceCount}</span>
+          </div>
+        </button>
+
+        <div className="pt-4">
+          <a 
+            href="/Logic Support Contrast List.pdf" 
+            download
+            className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors px-4 py-2 rounded-full hover:bg-white/50 w-fit mx-auto"
+          >
+            <Download size={16} />
+            Download Entire List
+          </a>
+        </div>
       </div>
     </div>
   );
