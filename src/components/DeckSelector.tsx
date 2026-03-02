@@ -1,4 +1,4 @@
-
+import ReactGA from 'react-ga4';
 import { wordList } from '../data/words';
 import { Download } from 'lucide-react';
 
@@ -22,7 +22,10 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
         </div>
 
         <button 
-          onClick={() => onSelectMode('SupportContrast')}
+          onClick={() => {
+            ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Support vs Contrast' });
+            onSelectMode('SupportContrast');
+          }}
           className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
@@ -32,7 +35,10 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
         </button>
 
         <button 
-          onClick={() => onSelectMode('LogicNegative')}
+          onClick={() => {
+            ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Logic vs Negative' });
+            onSelectMode('LogicNegative');
+          }}
           className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
@@ -42,7 +48,10 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
         </button>
 
         <button 
-          onClick={() => onSelectMode('Extreme')}
+          onClick={() => {
+            ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Extreme Words' });
+            onSelectMode('Extreme');
+          }}
           className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
@@ -52,7 +61,10 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
         </button>
 
         <button 
-          onClick={() => onSelectMode('Reference')}
+          onClick={() => {
+            ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Previously Referenced' });
+            onSelectMode('Reference');
+          }}
           className="w-full group bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">

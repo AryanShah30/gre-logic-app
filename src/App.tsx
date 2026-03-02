@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ReactGA from 'react-ga4';
 import { DeckSelector } from './components/DeckSelector';
 import { Quiz } from './components/Quiz';
 
@@ -8,6 +9,11 @@ type View = 'home' | 'quiz';
 export default function App() {
   const [view, setView] = useState<View>('home');
   const [quizMode, setQuizMode] = useState<'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference'>('SupportContrast');
+
+  useEffect(() => {
+    ReactGA.initialize('G-8CK4LGJL6B');
+    ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+  }, []);
 
   const startQuiz = (mode: 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference') => {
     setQuizMode(mode);

@@ -4,6 +4,7 @@ import { WordItem, wordList, Category } from '../data/words';
 import { Card } from './Card';
 import { ArrowRight, X, RotateCcw, BarChart2, ChevronDown, ChevronUp } from 'lucide-react';
 import { useWordStatus } from '../hooks/useWordStatus';
+import ReactGA from 'react-ga4';
 
 interface QuizProps {
   mode: 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference';
@@ -52,6 +53,17 @@ export function Quiz({ mode, onExit }: QuizProps) {
   const currentWord = queue[currentIndex];
   const isFlashcardMode = mode === 'Extreme' || mode === 'Reference';
   const isFinished = currentIndex >= queue.length && queue.length > 0;
+
+  useEffect(() => {
+    if (isFinished) {
+      ReactGA.event({
+        category: 'Quiz',
+        action: 'quiz_completed',
+        label: mode,
+        value: sessionStats.correct.length
+      });
+    }
+  }, [isFinished, mode, sessionStats.correct.length]);
 
   const handleAnswer = (selectedCategory: Category) => {
     if (!currentWord || isTransitioning) return;
