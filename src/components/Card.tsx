@@ -30,6 +30,13 @@ export function Card({ word, showExample, status }: CardProps) {
     return 'text-4xl md:text-5xl';
   };
 
+  const renderExample = (text: string) => {
+    const parts = text.split(/\*\*(.+?)\*\*/g);
+    return parts.map((part, i) =>
+      i % 2 === 1 ? <strong key={i} className="font-bold text-gray-900 italic">{part}</strong> : part
+    );
+  };
+
   return (
     <div className={`w-full max-w-md h-56 md:h-72 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border flex flex-col items-center justify-center p-5 md:p-8 text-center transition-all duration-500 ${getBgColor()}`}>
       {!showExample ? (
@@ -43,14 +50,16 @@ export function Card({ word, showExample, status }: CardProps) {
               </span>
             )}
             
-            <div className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-1">Correct Answer</div>
-            
-            <div className="text-xl font-bold text-gray-900">{word.category}</div>
-            
+            {word.category !== 'Extreme' && (
+              <>
+                <div className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-1">Correct Answer</div>
+                <div className="text-xl font-bold text-gray-900">{word.category}</div>
+              </>
+            )}
 
           </div>
           {word.example && (
-            <p className="text-base md:text-xl text-gray-600 font-serif italic leading-relaxed">"{word.example}"</p>
+            <p className="text-base md:text-xl text-gray-600 font-serif italic leading-relaxed">"{renderExample(word.example)}"</p>
           )}
         </div>
       )}
