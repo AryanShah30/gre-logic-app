@@ -38,11 +38,11 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
             ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Support vs Contrast' });
             onSelectMode('SupportContrast');
           }}
-          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:bg-emerald-50/60 hover:border-emerald-100 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-base md:text-xl text-gray-900">Support vs Contrast</h3>
-            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{supportCount}</span>
+            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold shadow-sm border border-emerald-100 transition-colors">{supportCount}</span>
           </div>
         </button>
 
@@ -51,11 +51,11 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
             ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Logic vs Negative' });
             onSelectMode('LogicNegative');
           }}
-          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:bg-sky-50/60 hover:border-sky-100 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-base md:text-xl text-gray-900">Logic vs Negative</h3>
-            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{logicCount}</span>
+            <span className="px-3 py-1 rounded-full bg-sky-50 text-sky-600 text-xs font-bold shadow-sm border border-sky-100 transition-colors">{logicCount}</span>
           </div>
         </button>
 
@@ -64,11 +64,11 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
             ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Extreme Words' });
             onSelectMode('Extreme');
           }}
-          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:bg-orange-50/60 hover:border-orange-100 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-base md:text-xl text-gray-900">Extreme Words</h3>
-            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{extremeCount}</span>
+            <span className="px-3 py-1 rounded-full bg-orange-50 text-orange-700 text-xs font-bold shadow-sm border border-orange-100 transition-colors">{extremeCount}</span>
           </div>
         </button>
 
@@ -77,11 +77,11 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
             ReactGA.event({ category: 'Quiz', action: 'deck_selected', label: 'Previously Referenced' });
             onSelectMode('Reference');
           }}
-          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
+          className="w-full group bg-white/70 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-sm border border-white/40 hover:bg-violet-50/60 hover:border-violet-100 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left"
         >
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-base md:text-xl text-gray-900">Previously Referenced</h3>
-            <span className="px-3 py-1 rounded-full bg-white text-xs font-bold text-gray-600 shadow-sm transition-colors">{referenceCount}</span>
+            <span className="px-3 py-1 rounded-full bg-violet-50 text-violet-600 text-xs font-bold shadow-sm border border-violet-100 transition-colors">{referenceCount}</span>
           </div>
         </button>
 
