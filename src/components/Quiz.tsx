@@ -24,6 +24,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
   const [showExampleOnly, setShowExampleOnly] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showComplete, setShowComplete] = useState(false);
   const [sessionStats, setSessionStats] = useState<SessionStats>({ correct: [], incorrect: [] });
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   
@@ -51,13 +52,14 @@ export function Quiz({ mode, onExit }: QuizProps) {
     setShowExampleOnly(false);
     setIsTransitioning(false);
     setShowStats(false);
+    setShowComplete(false);
     setSessionStats({ correct: [], incorrect: [] });
   }, [filteredWords]);
 
   const currentWord = queue[currentIndex];
   const isFlashcardMode = mode === 'Extreme' || mode === 'Reference';
-  const isFinished = currentIndex >= queue.length && queue.length > 0;
-  const isReviewing = currentIndex < maxReachedIndex;
+  const isFinished = (currentIndex >= queue.length && queue.length > 0) || showComplete;
+  const isReviewing = currentIndex < maxReachedIndex && !showComplete;
   const sessionResult = currentWord
     ? sessionStats.correct.includes(currentWord.term)
       ? 'correct'
@@ -111,7 +113,14 @@ export function Quiz({ mode, onExit }: QuizProps) {
 
   const goForward = () => {
     if (currentIndex >= maxReachedIndex) return;
-    setCurrentIndex(prev => prev + 1);
+    const next = currentIndex + 1;
+    if (next >= maxReachedIndex) {
+      setShowComplete(true);
+      setShowExample(false);
+      setShowExampleOnly(false);
+      return;
+    }
+    setCurrentIndex(next);
     setShowExample(false);
     setShowExampleOnly(false);
   };
@@ -140,6 +149,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
     setShowExample(false);
     setShowExampleOnly(false);
     setShowStats(false);
+    setShowComplete(false);
     setSessionStats({ correct: [], incorrect: [] });
   };
 
@@ -258,12 +268,26 @@ export function Quiz({ mode, onExit }: QuizProps) {
         )}
 
         <div className="w-full space-y-3">
-          <button 
-            onClick={handleRestart}
-            className="w-full h-12 md:h-14 rounded-2xl bg-gray-900 text-white font-bold text-base md:text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
-          >
-            <RotateCcw size={18} /> Restart Session
-          </button>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => {
+                setShowComplete(false);
+                setCurrentIndex(0);
+                setShowExample(false);
+                setShowExampleOnly(false);
+              }}
+              className="h-12 md:h-14 rounded-2xl bg-white/70 text-gray-700 font-bold text-sm md:text-base hover:bg-white active:scale-95 transition-all border border-gray-200 flex items-center justify-center gap-1.5"
+            >
+              <ChevronLeft size={16} /> Review
+            </button>
+
+            <button 
+              onClick={handleRestart}
+              className="h-12 md:h-14 rounded-2xl bg-gray-900 text-white font-bold text-sm md:text-base hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-1.5"
+            >
+              <RotateCcw size={16} /> Restart
+            </button>
+          </div>
           
           <button 
             onClick={onExit}
@@ -377,6 +401,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
           {isReviewing && (
             <button
               onClick={goForward}
+              title={currentIndex === maxReachedIndex - 1 ? 'Back to results' : 'Forward'}
               className="p-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
             >
               <ChevronRight size={20} />
