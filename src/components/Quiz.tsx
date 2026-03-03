@@ -115,9 +115,13 @@ export function Quiz({ mode, onExit }: QuizProps) {
     if (currentIndex >= maxReachedIndex) return;
     const next = currentIndex + 1;
     if (next >= maxReachedIndex) {
-      setShowComplete(true);
-      setShowExample(false);
-      setShowExampleOnly(false);
+      if (maxReachedIndex >= queue.length) {
+        setShowComplete(true);
+        setShowExample(false);
+        setShowExampleOnly(false);
+      } else {
+        nextCard();
+      }
       return;
     }
     setCurrentIndex(next);
@@ -401,7 +405,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
           {isReviewing && (
             <button
               onClick={goForward}
-              title={currentIndex === maxReachedIndex - 1 ? 'Back to results' : 'Forward'}
+              title={maxReachedIndex >= queue.length && currentIndex === maxReachedIndex - 1 ? 'Back to results' : 'Forward'}
               className="p-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
             >
               <ChevronRight size={20} />
@@ -453,8 +457,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
         {isFlashcardMode ? (
           isReviewing ? (
             <div className="flex items-center justify-center gap-2 py-2">
-              <span className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-xs font-semibold">
-                <RotateCcw size={12} />
+              <span className="px-4 py-2 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-xs font-semibold">
                 Reviewing past card
               </span>
             </div>
@@ -468,8 +471,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
           )
         ) : isReviewing ? (
           <div className="flex items-center justify-center gap-2 py-2">
-            <span className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-xs font-semibold">
-              <RotateCcw size={12} />
+            <span className="px-4 py-2 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-xs font-semibold">
               Reviewing past card
             </span>
           </div>
