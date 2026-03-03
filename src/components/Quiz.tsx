@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { WordItem, wordList, Category } from '../data/words';
 import { Card } from './Card';
-import { ArrowRight, X, RotateCcw, BarChart2, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, X, RotateCcw, BarChart2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useWordStatus } from '../hooks/useWordStatus';
 import ReactGA from 'react-ga4';
 
@@ -19,7 +19,9 @@ interface SessionStats {
 export function Quiz({ mode, onExit }: QuizProps) {
   const [queue, setQueue] = useState<WordItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [maxReachedIndex, setMaxReachedIndex] = useState(0);
   const [showExample, setShowExample] = useState(false);
+  const [showExampleOnly, setShowExampleOnly] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [sessionStats, setSessionStats] = useState<SessionStats>({ correct: [], incorrect: [] });
@@ -44,7 +46,9 @@ export function Quiz({ mode, onExit }: QuizProps) {
     const shuffled = [...filteredWords].sort(() => Math.random() - 0.5);
     setQueue(shuffled);
     setCurrentIndex(0);
+    setMaxReachedIndex(0);
     setShowExample(false);
+    setShowExampleOnly(false);
     setIsTransitioning(false);
     setShowStats(false);
     setSessionStats({ correct: [], incorrect: [] });
@@ -53,6 +57,14 @@ export function Quiz({ mode, onExit }: QuizProps) {
   const currentWord = queue[currentIndex];
   const isFlashcardMode = mode === 'Extreme' || mode === 'Reference';
   const isFinished = currentIndex >= queue.length && queue.length > 0;
+  const isReviewing = currentIndex < maxReachedIndex;
+  const sessionResult = currentWord
+    ? sessionStats.correct.includes(currentWord.term)
+      ? 'correct'
+      : sessionStats.incorrect.includes(currentWord.term)
+        ? 'incorrect'
+        : null
+    : null;
 
   useEffect(() => {
     if (isFinished) {
@@ -86,12 +98,30 @@ export function Quiz({ mode, onExit }: QuizProps) {
       }, 700);
     } else {
       setShowExample(true);
+      setShowExampleOnly(false);
     }
   };
 
-  const nextCard = () => {
+  const prevCard = () => {
+    if (currentIndex <= 0) return;
+    setCurrentIndex(prev => prev - 1);
+    setShowExample(false);
+    setShowExampleOnly(false);
+  };
+
+  const goForward = () => {
+    if (currentIndex >= maxReachedIndex) return;
     setCurrentIndex(prev => prev + 1);
     setShowExample(false);
+    setShowExampleOnly(false);
+  };
+
+  const nextCard = () => {
+    const next = currentIndex + 1;
+    setCurrentIndex(next);
+    if (next > maxReachedIndex) setMaxReachedIndex(next);
+    setShowExample(false);
+    setShowExampleOnly(false);
   };
 
   const handleReset = () => {
@@ -106,7 +136,9 @@ export function Quiz({ mode, onExit }: QuizProps) {
     const shuffled = [...filteredWords].sort(() => Math.random() - 0.5);
     setQueue(shuffled);
     setCurrentIndex(0);
+    setMaxReachedIndex(0);
     setShowExample(false);
+    setShowExampleOnly(false);
     setShowStats(false);
     setSessionStats({ correct: [], incorrect: [] });
   };
@@ -255,8 +287,8 @@ export function Quiz({ mode, onExit }: QuizProps) {
           <div className="w-full h-full bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 flex flex-col overflow-hidden">
             <div className="flex justify-between items-center mb-6 flex-shrink-0">
               <h3 className="text-xl font-bold text-gray-900">Session Log</h3>
-              <button onClick={() => setShowStats(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                <X size={18} />
+              <button onClick={() => setShowStats(false)} className="p-2 -mr-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors">
+                <X size={20} />
               </button>
             </div>
             
@@ -328,12 +360,29 @@ export function Quiz({ mode, onExit }: QuizProps) {
       )}
 
       <div className="w-full flex justify-between items-center mb-4 md:mb-8">
-        <button 
-          onClick={onExit} 
-          className="p-2 -ml-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
-        >
-          <X size={20} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={onExit} 
+            className="p-2 -ml-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
+          >
+            <X size={20} />
+          </button>
+          <button
+            onClick={prevCard}
+            disabled={currentIndex === 0}
+            className="p-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          {isReviewing && (
+            <button
+              onClick={goForward}
+              className="p-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
+            >
+              <ChevronRight size={20} />
+            </button>
+          )}
+        </div>
         
         <div className="flex items-center gap-3">
           {!isFlashcardMode && (
@@ -358,43 +407,56 @@ export function Quiz({ mode, onExit }: QuizProps) {
 
       <div className="w-full flex justify-center mb-4 md:mb-8">
         <Card 
-          word={currentWord} 
-          showExample={showExample}
+          word={currentWord}
+          showExample={showExample || showExampleOnly}
+          hideAnswer={showExampleOnly}
           status={!isFlashcardMode ? status[currentWord.term] : undefined}
+          onShowExample={!showExample && !showExampleOnly && currentWord.example
+            ? () => { setShowExampleOnly(true); }
+            : undefined
+          }
+          onHideExample={showExampleOnly ? () => setShowExampleOnly(false) : undefined}
+          categoryPill={isReviewing && !isFlashcardMode && sessionResult !== null
+            ? currentWord.category
+            : undefined
+          }
+          categoryCorrect={sessionResult === 'correct' ? true : sessionResult === 'incorrect' ? false : undefined}
         />
       </div>
 
       <div className="w-full space-y-3">
         {isFlashcardMode ? (
-          mode === 'Reference' ? (
+          isReviewing ? (
+            <div className="flex items-center justify-center gap-2 py-2">
+              <span className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-xs font-semibold">
+                <RotateCcw size={12} />
+                Reviewing past card
+              </span>
+            </div>
+          ) : (
+          <button 
+            onClick={nextCard}
+            className="w-full h-16 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+          >
+            Next Word <ArrowRight size={20} />
+          </button>
+          )
+        ) : isReviewing ? (
+          <div className="flex items-center justify-center gap-2 py-2">
+            <span className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-xs font-semibold">
+              <RotateCcw size={12} />
+              Reviewing past card
+            </span>
+          </div>
+        ) : (
+          showExample ? (
             <button 
               onClick={nextCard}
               className="w-full h-16 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
             >
               Next Word <ArrowRight size={20} />
             </button>
-          ) : (
-            <div className="grid grid-cols-2 gap-3 w-full">
-              <button 
-                onClick={() => setShowExample(!showExample)}
-                className={`h-16 rounded-2xl font-bold text-lg active:scale-95 transition-all shadow-sm border flex items-center justify-center gap-2 ${
-                  showExample 
-                    ? 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200' 
-                    : 'bg-white/60 backdrop-blur-xl text-gray-900 border-white/20 hover:bg-white/80'
-                }`}
-              >
-                {showExample ? 'Hide Example' : 'Example'}
-              </button>
-              <button 
-                onClick={nextCard}
-                className="h-16 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
-              >
-                Next Word <ArrowRight size={20} />
-              </button>
-            </div>
-          )
-        ) : (
-          !showExample ? (
+          ) : showExampleOnly ? (
             <div className="grid grid-cols-2 gap-3">
               {mode === 'SupportContrast' && (
                 <>
@@ -414,7 +476,6 @@ export function Quiz({ mode, onExit }: QuizProps) {
                   </button>
                 </>
               )}
-              
               {mode === 'LogicNegative' && (
                 <>
                   <button 
@@ -435,12 +496,44 @@ export function Quiz({ mode, onExit }: QuizProps) {
               )}
             </div>
           ) : (
-            <button 
-              onClick={nextCard}
-              className="w-full h-16 rounded-2xl bg-gray-900 text-white font-bold text-lg hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
-            >
-              Next Word <ArrowRight size={20} />
-            </button>
+            <div className="grid grid-cols-2 gap-3">
+              {mode === 'SupportContrast' && (
+                <>
+                  <button 
+                    onClick={() => handleAnswer('Support')}
+                    disabled={isTransitioning}
+                    className="h-16 rounded-2xl bg-emerald-500/10 text-emerald-700 font-bold text-lg hover:bg-emerald-500/20 active:scale-95 transition-all backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Support
+                  </button>
+                  <button 
+                    onClick={() => handleAnswer('Contrast')}
+                    disabled={isTransitioning}
+                    className="h-16 rounded-2xl bg-rose-500/10 text-rose-700 font-bold text-lg hover:bg-rose-500/20 active:scale-95 transition-all backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Contrast
+                  </button>
+                </>
+              )}
+              {mode === 'LogicNegative' && (
+                <>
+                  <button 
+                    onClick={() => handleAnswer('No Logic Change')}
+                    disabled={isTransitioning}
+                    className="h-16 rounded-2xl bg-blue-500/10 text-blue-700 font-bold text-sm md:text-lg hover:bg-blue-500/20 active:scale-95 transition-all backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    No Logic Change
+                  </button>
+                  <button 
+                    onClick={() => handleAnswer('Negative')}
+                    disabled={isTransitioning}
+                    className="h-16 rounded-2xl bg-orange-500/10 text-orange-700 font-bold text-lg hover:bg-orange-500/20 active:scale-95 transition-all backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Negative (No)
+                  </button>
+                </>
+              )}
+            </div>
           )
         )}
       </div>
