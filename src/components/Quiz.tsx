@@ -450,6 +450,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
             : undefined
           }
           categoryCorrect={sessionResult === 'correct' ? true : sessionResult === 'incorrect' ? false : undefined}
+          subCategoryPill={isFlashcardMode && currentWord.subCategory ? currentWord.subCategory : undefined}
         />
       </div>
 

@@ -11,9 +11,10 @@ interface CardProps {
   onHideExample?: () => void; 
   categoryPill?: string;       
   categoryCorrect?: boolean;
+  subCategoryPill?: string;
 }
 
-export function Card({ word, showExample, hideAnswer, status, onShowExample, onHideExample, categoryPill, categoryCorrect }: CardProps) {
+export function Card({ word, showExample, hideAnswer, status, onShowExample, onHideExample, categoryPill, categoryCorrect, subCategoryPill }: CardProps) {
   const getBgColor = () => {
     if (showExample) return 'bg-white/80';
     if (status === 'correct') return 'bg-emerald-500/10 border-emerald-500/20';
@@ -70,7 +71,13 @@ export function Card({ word, showExample, hideAnswer, status, onShowExample, onH
         </button>
       )}
 
-      {categoryPill && (
+      {subCategoryPill && (
+        <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full text-[12px] font-bold border shadow-sm bg-amber-50/90 text-amber-700 border-amber-200/70">
+          {subCategoryPill}
+        </div>
+      )}
+
+      {!subCategoryPill && categoryPill && (
         <div className={`absolute top-3 left-3 px-3 py-1.5 rounded-full text-[12px] font-bold border shadow-sm ${pillColor}`}>
           {categoryPill}
         </div>
