@@ -214,8 +214,10 @@ export const wordList: WordItem[] = [
   { term: "aforementioned", example: "", category: "Reference", subCategory: "Other words" },
   { term: "similar", example: "", category: "Reference", subCategory: "Other words" },
   { term: "similarly", example: "", category: "Reference", subCategory: "Other words" },
+  { term: "preceding", example: "", category: "Reference", subCategory: "Other words" },
 
   { term: "such", example: "", category: "Reference", subCategory: "In some cases" },
   { term: "the", example: "", category: "Reference", subCategory: "In some cases" },
   { term: "or", example: "", category: "Reference", subCategory: "In some cases" },
+  { term: "what in fact", example: "", category: "Reference", subCategory: "In some cases" },
 ];
