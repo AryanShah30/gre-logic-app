@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { WordItem, wordList, Category } from '../data/words';
 import { Card } from './Card';
-import { ArrowRight, X, RotateCcw, BarChart2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Menu, RotateCcw, BarChart2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useWordStatus } from '../hooks/useWordStatus';
 import ReactGA from 'react-ga4';
 
@@ -58,6 +58,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
     setShowStats(false);
     setShowComplete(false);
     setSessionStats({ correct: [], incorrect: [] });
+    ReactGA.event({ category: 'Quiz', action: 'quiz_started', label: mode });
   }, [filteredWords]);
 
   const currentWord = queue[currentIndex];
@@ -113,6 +114,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
     setCurrentIndex(prev => prev - 1);
     setShowExample(false);
     setShowExampleOnly(false);
+    ReactGA.event({ category: 'Quiz', action: 'card_reviewed', label: mode });
   };
 
   const goForward = () => {
@@ -143,13 +145,17 @@ export function Quiz({ mode, onExit }: QuizProps) {
 
   const handleReset = () => {
     if (confirm('Are you sure you want to reset all progress for this deck? This will clear your correct/incorrect history.')) {
+      ReactGA.event({ category: 'Quiz', action: 'quiz_reset', label: mode });
       const termsToReset = filteredWords.map(w => w.term);
       resetStatus(termsToReset);
       handleRestart();
     }
   };
 
-  const handleRestart = () => {
+  const handleRestart = (fromCompletion = false) => {
+    if (fromCompletion) {
+      ReactGA.event({ category: 'Quiz', action: 'quiz_restarted', label: mode });
+    }
     const shuffled = [...filteredWords].sort(() => Math.random() - 0.5);
     setQueue(shuffled);
     setCurrentIndex(0);
@@ -283,6 +289,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
                 setCurrentIndex(0);
                 setShowExample(false);
                 setShowExampleOnly(false);
+                ReactGA.event({ category: 'Quiz', action: 'review_session_started', label: mode });
               }}
               className="h-12 md:h-14 rounded-2xl bg-white/70 text-gray-700 font-bold text-sm md:text-base hover:bg-white active:scale-95 transition-all border border-gray-200 flex items-center justify-center gap-1.5"
             >
@@ -290,7 +297,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
             </button>
 
             <button 
-              onClick={handleRestart}
+              onClick={() => handleRestart(true)}
               className="h-12 md:h-14 rounded-2xl bg-gray-900 text-white font-bold text-sm md:text-base hover:bg-black active:scale-95 transition-all shadow-lg flex items-center justify-center gap-1.5"
             >
               <RotateCcw size={16} /> Restart
@@ -320,7 +327,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
             <div className="flex justify-between items-center mb-6 flex-shrink-0">
               <h3 className="text-xl font-bold text-gray-900">Session Log</h3>
               <button onClick={() => setShowStats(false)} className="p-2 -mr-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors">
-                <X size={20} />
+                <Menu size={20} />
               </button>
             </div>
             
@@ -394,10 +401,10 @@ export function Quiz({ mode, onExit }: QuizProps) {
       <div className="w-full flex justify-between items-center mb-4 md:mb-8">
         <div className="flex items-center gap-1">
           <button 
-            onClick={onExit} 
+            onClick={() => { ReactGA.event({ category: 'Quiz', action: 'quiz_exited_early', label: mode }); onExit(); }}
             className="p-2 -ml-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
           >
-            <X size={20} />
+            <Menu size={20} />
           </button>
           <button
             onClick={prevCard}
@@ -429,7 +436,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
           </div>
           {!isFlashcardMode && (
             <button 
-              onClick={() => setShowStats(true)}
+              onClick={() => { setShowStats(true); ReactGA.event({ category: 'Quiz', action: 'session_log_opened', label: mode }); }}
               className="p-2 -mr-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
             >
               <BarChart2 size={20} />
@@ -445,7 +452,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
           hideAnswer={showExampleOnly}
           status={!isFlashcardMode ? status[currentWord.term] : undefined}
           onShowExample={!showExample && !showExampleOnly && currentWord.example
-            ? () => { setShowExampleOnly(true); }
+            ? () => { setShowExampleOnly(true); ReactGA.event({ category: 'Quiz', action: 'example_viewed', label: mode }); }
             : undefined
           }
           onHideExample={showExampleOnly ? () => setShowExampleOnly(false) : undefined}

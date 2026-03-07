@@ -90,6 +90,7 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
           <a 
             href="/Logic Support Contrast List.pdf" 
             download
+            onClick={() => ReactGA.event({ category: 'Engagement', action: 'pdf_downloaded' })}
             className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors px-2 py-2 rounded-full hover:bg-white/50"
           >
             <Download size={16} />
@@ -101,6 +102,7 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
               href="https://github.com/AryanShah30/gre-logic-app"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => ReactGA.event({ category: 'Engagement', action: 'github_clicked' })}
               className="text-gray-400 hover:text-gray-800 transition-colors"
               aria-label="GitHub"
             >
@@ -112,6 +114,7 @@ export function DeckSelector({ onSelectMode }: DeckSelectorProps) {
               href="https://www.linkedin.com/in/aryanashah/"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => ReactGA.event({ category: 'Engagement', action: 'linkedin_clicked' })}
               className="text-gray-400 hover:text-[#0A66C2] transition-colors"
               aria-label="LinkedIn"
             >

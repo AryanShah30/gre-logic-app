@@ -1,6 +1,6 @@
 import ReactGA from 'react-ga4';
 import { wordList } from '../data/words';
-import { ChevronLeft } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 interface ReferenceSelectorProps {
   onSelectMode: (mode: 'ReferencePronoun' | 'ReferenceOther' | 'ReferenceInSomeCases') => void;
@@ -22,7 +22,7 @@ export function ReferenceSelector({ onSelectMode, onBack }: ReferenceSelectorPro
             className="p-2 -ml-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors"
             aria-label="Back"
           >
-            <ChevronLeft size={20} />
+            <Menu size={20} />
           </button>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Previously Referenced</h2>
         </div>
