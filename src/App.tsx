@@ -36,23 +36,29 @@ export default function App() {
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100 via-gray-50 to-white -z-10" />
       
       {view === 'home' && (
-        <DeckSelector 
-          onSelectMode={handleMainSelect} 
-        />
+        <div className="animate-entry flex-1 flex flex-col items-center justify-center">
+          <DeckSelector 
+            onSelectMode={handleMainSelect} 
+          />
+        </div>
       )}
 
       {view === 'referenceMenu' && (
-        <ReferenceSelector
-          onSelectMode={handleReferenceSelect}
-          onBack={() => setView('home')}
-        />
+        <div className="animate-entry flex-1 flex flex-col items-center justify-center">
+          <ReferenceSelector
+            onSelectMode={handleReferenceSelect}
+            onBack={() => setView('home')}
+          />
+        </div>
       )}
       
       {view === 'quiz' && (
-        <Quiz 
-          mode={quizMode} 
-          onExit={() => setView('home')} 
-        />
+        <div className="animate-entry flex-1 flex flex-col items-center justify-center">
+          <Quiz 
+            mode={quizMode} 
+            onExit={() => setView('home')} 
+          />
+        </div>
       )}
       <Analytics />
     </div>
