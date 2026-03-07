@@ -7,7 +7,7 @@ import { useWordStatus } from '../hooks/useWordStatus';
 import ReactGA from 'react-ga4';
 
 interface QuizProps {
-  mode: 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference';
+  mode: 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'ReferencePronoun' | 'ReferenceOther' | 'ReferenceInSomeCases';
   onExit: () => void;
 }
 
@@ -37,8 +37,12 @@ export function Quiz({ mode, onExit }: QuizProps) {
       return wordList.filter(w => w.category === 'No Logic Change' || w.category === 'Negative');
     } else if (mode === 'Extreme') {
       return wordList.filter(w => w.category === 'Extreme');
-    } else if (mode === 'Reference') {
-      return wordList.filter(w => w.category === 'Reference');
+    } else if (mode === 'ReferencePronoun') {
+      return wordList.filter(w => w.category === 'Reference' && w.subCategory === 'Pronouns');
+    } else if (mode === 'ReferenceOther') {
+      return wordList.filter(w => w.category === 'Reference' && w.subCategory === 'Other words');
+    } else if (mode === 'ReferenceInSomeCases') {
+      return wordList.filter(w => w.category === 'Reference' && w.subCategory === 'In some cases');
     }
     return [];
   }, [mode]);
@@ -57,7 +61,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
   }, [filteredWords]);
 
   const currentWord = queue[currentIndex];
-  const isFlashcardMode = mode === 'Extreme' || mode === 'Reference';
+  const isFlashcardMode = mode === 'Extreme' || mode === 'ReferencePronoun' || mode === 'ReferenceOther' || mode === 'ReferenceInSomeCases';
   const isFinished = (currentIndex >= queue.length && queue.length > 0) || showComplete;
   const isReviewing = currentIndex < maxReachedIndex && !showComplete;
   const sessionResult = currentWord
@@ -450,7 +454,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
             : undefined
           }
           categoryCorrect={sessionResult === 'correct' ? true : sessionResult === 'incorrect' ? false : undefined}
-          subCategoryPill={isFlashcardMode && currentWord.subCategory ? currentWord.subCategory : undefined}
+          subCategoryPill={undefined}
         />
       </div>
 

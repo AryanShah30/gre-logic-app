@@ -2,20 +2,31 @@ import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import { DeckSelector } from './components/DeckSelector';
+import { ReferenceSelector } from './components/ReferenceSelector';
 import { Quiz } from './components/Quiz';
 
-type View = 'home' | 'quiz';
+type QuizMode = 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'ReferencePronoun' | 'ReferenceOther' | 'ReferenceInSomeCases';
+type View = 'home' | 'referenceMenu' | 'quiz';
 
 export default function App() {
   const [view, setView] = useState<View>('home');
-  const [quizMode, setQuizMode] = useState<'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference'>('SupportContrast');
+  const [quizMode, setQuizMode] = useState<QuizMode>('SupportContrast');
 
   useEffect(() => {
     ReactGA.initialize('G-8CK4LGJL6B');
     ReactGA.send({ hitType: "pageview", page: window.location.pathname });
   }, []);
 
-  const startQuiz = (mode: 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference') => {
+  const handleMainSelect = (mode: 'SupportContrast' | 'LogicNegative' | 'Extreme' | 'Reference') => {
+    if (mode === 'Reference') {
+      setView('referenceMenu');
+    } else {
+      setQuizMode(mode);
+      setView('quiz');
+    }
+  };
+
+  const handleReferenceSelect = (mode: 'ReferencePronoun' | 'ReferenceOther' | 'ReferenceInSomeCases') => {
     setQuizMode(mode);
     setView('quiz');
   };
@@ -26,7 +37,14 @@ export default function App() {
       
       {view === 'home' && (
         <DeckSelector 
-          onSelectMode={startQuiz} 
+          onSelectMode={handleMainSelect} 
+        />
+      )}
+
+      {view === 'referenceMenu' && (
+        <ReferenceSelector
+          onSelectMode={handleReferenceSelect}
+          onBack={() => setView('home')}
         />
       )}
       
@@ -40,3 +58,4 @@ export default function App() {
     </div>
   );
 }
+
