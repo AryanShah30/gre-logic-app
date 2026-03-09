@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { WordItem, wordList, Category } from '../data/words';
 import { Card } from './Card';
-import { ArrowRight, Menu, RotateCcw, BarChart2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Menu, RotateCcw, BarChart2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useWordStatus } from '../hooks/useWordStatus';
 import ReactGA from 'react-ga4';
 
@@ -327,7 +327,7 @@ export function Quiz({ mode, onExit }: QuizProps) {
             <div className="flex justify-between items-center mb-6 flex-shrink-0">
               <h3 className="text-xl font-bold text-gray-900">Session Log</h3>
               <button onClick={() => setShowStats(false)} className="p-2 -mr-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-gray-900 transition-colors">
-                <Menu size={20} />
+                <X size={20} />
               </button>
             </div>
             
